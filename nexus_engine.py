@@ -33,3 +33,18 @@ class NexusCore:
             self.active_broadcasts[broadcast_id]["guests"].append(guest_id)
             return True
         return False
+
+    def start_pk_battle(self, broadcast_id, host_id, guest_id, duration_seconds=300):
+        self.active_broadcasts[broadcast_id]["pk_mode"] = {
+            "participants": [host_id, guest_id],
+            "scores": {host_id: 0, guest_id: 0},
+            "status": "active"
+        }
+        print(f"[PK System] Battle started between {host_id} and {guest_id}!")
+
+    def update_pk_score(self, broadcast_id, user_id, points):
+        pk_data = self.active_broadcasts[broadcast_id].get("pk_mode")
+        if pk_data and user_id in pk_data["scores"]:
+            pk_data["scores"][user_id] += points
+            return pk_data["scores"]
+        return None
